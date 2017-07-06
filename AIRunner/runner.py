@@ -102,6 +102,7 @@ model = model_module.create_model(x_train.shape[1:], num_classes)
 model.summary() ## print model summary
 with open(os.path.join(WORKINGLOG_DIR_PATH, "model.json") ,"w") as fp:
   fp.write(model.to_json())
+
 plot_model(model, to_file=os.path.join(WORKINGLOG_DIR_PATH, 'model.png'), show_shapes=True)
 
 # ==================================================== #

@@ -149,16 +149,6 @@ class Manager:
         return os.path.join(self.project_rootdir, self.models_dirname, model_name+self.model_ext)
 
 
-def test():
-    manager = Manager(ROOT_DIR, "models", "params", "results")
-    manager.search_params()
-    manager.search_models()
-
-    for param in manager.get_param_names():
-        for model in manager.get_model_names():
-            model, param = manager.get_next()
-            print(model, param)
-
 
 def main():
     backgraoud_proc = BackGroundProcess()

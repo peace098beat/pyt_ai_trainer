@@ -75,8 +75,8 @@ epochs = config.getint(section1, 'epochs')  # localhost
 # ==================================================== #
 # The data, shuffled and split between train and test sets:
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-x_train = x_train[:32,]
-y_train = y_train[:32,]
+# x_train = x_train[:32,]
+# y_train = y_train[:32,]
 
 # Convert class vectors to binary class matrices.
 y_train = keras.utils.to_categorical(y_train, num_classes)

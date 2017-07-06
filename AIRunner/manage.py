@@ -108,14 +108,14 @@ class Manager:
         return sbmod.generate_dir([self.project_rootdir, self.results_dirname, model_name, param_name])
 
     def get_state(self, workspace_path):
-        if not os.path.exists(os.path.join(workspace_path, "start.txt")):
-            return self.State.UNEXCEPT
-
-        if not os.path.exists(os.path.join(workspace_path, "success.txt")):
+        if os.path.exists(os.path.join(workspace_path, "success.txt")):
             return self.State.SUCESS    
 
-        if not os.path.exists(os.path.join(workspace_path, "error.txt")):
+        if os.path.exists(os.path.join(workspace_path, "error.txt")):
             return self.State.ERORR
+
+        return self.State.UNEXCEPT
+
 
     def next(self):
         self.search_params()
@@ -196,13 +196,16 @@ def main():
 
             working_dir_path = manager.get_workspace_path(model_name, param_name)
 
-
             backgraoud_proc.popen(args, cws=working_dir_path)
 
             for line in backgraoud_proc.proc.stdout:
                 print(line)
 
-            
+            with open(os.path.join(workspace_path, "error.txt"), "w") as fp:
+                for line in backgraoud_proc.proc.stderr:
+                    print(line)
+                    fp.write(line.decode("utf-8") + "\n")
+
         # stdout, stderr = backgraoud_proc.read_std()
         # print(stdout)
         # print(stderr)

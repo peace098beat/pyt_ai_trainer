@@ -17,14 +17,6 @@ from keras.callbacks import Callback
 from datetime import datetime
 
 
-start = datetime.now()
-
-
-
-with open("start.txt", "w") as fp:
-  fp.write("start!")
-  fp.write(str(str))
-
 
 # ==================================================== #
 # Global Config
@@ -83,6 +75,9 @@ epochs = config.getint(section1, 'epochs')  # localhost
 # ==================================================== #
 # The data, shuffled and split between train and test sets:
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+x_train = x_train[:32,]
+y_train = y_train[:32,]
+
 # Convert class vectors to binary class matrices.
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
@@ -102,7 +97,6 @@ model = model_module.create_model(x_train.shape[1:], num_classes)
 model.summary() ## print model summary
 with open(os.path.join(WORKINGLOG_DIR_PATH, "model.json") ,"w") as fp:
   fp.write(model.to_json())
-
 plot_model(model, to_file=os.path.join(WORKINGLOG_DIR_PATH, 'model.png'), show_shapes=True)
 
 # ==================================================== #
@@ -126,6 +120,8 @@ cb_csvlogger = keras.callbacks.CSVLogger(
 # ==================================================== #
 # Training
 # ==================================================== #
+start = datetime.now()
+
 histroy = model.fit(x_train, y_train,
                     batch_size=batch_size,
                     epochs=epochs,

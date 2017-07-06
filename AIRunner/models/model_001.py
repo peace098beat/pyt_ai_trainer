@@ -10,7 +10,6 @@ from keras.callbacks import ModelCheckpoint
 from keras.callbacks import TensorBoard
 from keras.utils import plot_model   
 
-
 def create_model(input_shape, nb_classes):
     model = Sequential()
 

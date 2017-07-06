@@ -5,6 +5,9 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import BatchNormalization 
+from keras.layers import Convolution2D
+from keras.layers import ZeroPadding2D
 # Used in visualization
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import TensorBoard

@@ -159,57 +159,54 @@ def test():
             model, param = manager.get_next()
             print(model, param)
 
-    pass
 
 def main():
     backgraoud_proc = BackGroundProcess()
 
     manager = Manager(ROOT_DIR, "models", "params", "results")
     
-
-    while(1):
-        time.sleep(1)
+    while(True):
+        time.sleep(5)
 
         ## if isrunning
         if backgraoud_proc.isRunning():
             print(".")
         else:
-            print(" ---- Proc is Start --- ")
 
             n = manager.next()
 
             if(n == False):
-                return
+                print("Task is Nothing.. ")
+                continue
             
+            print(" ---- Proc is Start --- ")
+
             param_name = manager.get_primary_param()
             model_name = manager.get_primary_model()
 
+            working_dir_path = manager.get_workspace_path(model_name, param_name)
+            runner_filepath = os.path.join(ROOT_DIR, "runner.py")
             param_filepath = manager.get_param_path(param_name)
             model_filepath = manager.get_model_path(model_name)
-
-            runner_filepath = os.path.join(ROOT_DIR, "runner.py")
 
             args=["python3", runner_filepath,
                     "--model", model_filepath, 
                     "--conf", param_filepath ,
                     ]
 
-            working_dir_path = manager.get_workspace_path(model_name, param_name)
-
+            # Proccess Run
             backgraoud_proc.popen(args, cws=working_dir_path)
 
-            for line in backgraoud_proc.proc.stdout:
-                print(line)
+            # SUCCESS
+            if backgraoud_proc.proc.stdout != None:
+                for line in backgraoud_proc.proc.stdout:
+                    print(line.decode("utf-8"))
 
-            with open(os.path.join(workspace_path, "error.txt"), "w") as fp:
-                for line in backgraoud_proc.proc.stderr:
-                    print(line)
-                    fp.write(line.decode("utf-8") + "\n")
-
-        # stdout, stderr = backgraoud_proc.read_std()
-        # print(stdout)
-        # print(stderr)
-
+            # ERROR 
+            if backgraoud_proc.proc.stderr != None:
+                with open(os.path.join(working_dir_path, "error.txt"), "w") as fp:
+                    for line in backgraoud_proc.proc.stderr:
+                        fp.write(line.decode("utf-8") + "\n")
 
 
 
